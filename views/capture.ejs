@@ -20,6 +20,8 @@
 	    	<div class="overlay"></div>
 	    </div>
 	</div>
+	
+	<div class="well recommendation" style="text-align: center" id="recommendationLeftBottom"><h3>Blues Meter going down. Go and pep up yourself!</h3></div>
     
     <div class="indicator" id="indicator">
     	<script>
@@ -39,6 +41,7 @@
 	  
 	  var flag = 0;
 	  var eventX = 1;
+	  var timer1 = 0, timer2 = 0, timer3 = 0;
 	  
 	  canvasOverlay.style.position = "absolute";
 	  canvasOverlay.style.top = '0px';
@@ -48,12 +51,13 @@
 	  var htracker = new headtrackr.Tracker();
 	  
 	  function registerListeners() {
+	  		clearTimeout(timer2);
 	  		htracker.init(videoInput, canvasInput);
 	  		htracker.start();
 	  		document.addEventListener("facetrackingEvent", faceTrackingEventFunction);
-	  		setTimeout(function() {
+	  		timer3 = setTimeout(function() {
 		   		document.addEventListener("headtrackingEvent", headTrackingEventFunction);	
-		   	}, 8000);
+		   	}, 6000);
 	  }
 	  
 	  registerListeners();
@@ -102,24 +106,39 @@
 			   type: 'POST',
 			   data: data,
 			   success: function(data){
+				   clearTimeout(timer3);
 				   document.removeEventListener("facetrackingEvent", faceTrackingEventFunction);
 				   document.removeEventListener("headtrackingEvent", headTrackingEventFunction);
 				   htracker.stop();
 					$.ajax({ 
 					   url: '/getMoodPercent',
-					   success: function(data){
-						   setTimeout(function() {
-						   		ajaxCall('/showGauge/'+parseInt(data), 'indicator');
-						   		setTimeout(function() {
-						   			$('.mood .overlay').css('display','none');
-						   			$('.animationDiv').css('animation-name', 'animateDivDown');
-	   								$('.animationDiv').css('top', '50px');
-							   		registerListeners();
-							   	}, 3000);
-						   }, 2000);
+					   success: function(dataPercent){
+						   timer1 = setTimeout(function() {
+						   		$.ajax({ 
+								   url: '/showGauge/'+parseInt(dataPercent),
+								   success: function(data){
+									   $('#indicator').html(data);
+									   if(dataPercent < 40) {
+										   $('.recommendation').css('animation-name', 'animateDivRight');
+				   						   $('.recommendation').css('left', '0px');
+				   						   $('.recommendation').css('display', 'block');
+				   					   }
+									   ttimer2 = setTimeout(function() {
+								   			clearTimeout(timer1);
+								   			$('.recommendation').css('animation-name', 'animateDivLeft');
+			   						   		$('.recommendation').css('left', '-350px');	
+			   						   		$('.recommendation').css('display', 'none');
+								   			$('.mood .overlay').css('display','none');
+								   			$('.animationDiv').css('animation-name', 'animateDivDown');
+			   								$('.animationDiv').css('top', '50px');
+									   		registerListeners();
+									   	}, 6500);
+									}
+								});
+						   }, 5000);
 					   	}
 					});
-			   }
+			   	}
 			});
 	   }
 	   

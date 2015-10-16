@@ -67,3 +67,22 @@ a {
 	bottom: 0px;
 	right: 0px;
 }
+
+@keyframes animateDivRight {
+    from {left: -350px;}
+    to {left: 0px;}
+}
+
+@keyframes animateDivLeft {
+    from {left: 0px;}
+    to {left: -350px;}
+}
+
+.recommendation {
+	position: absolute;
+	left: 0px;
+	bottom: 0px;
+	display: none;
+	animation-name: animateDivRight;
+    animation-duration: 1s;
+}

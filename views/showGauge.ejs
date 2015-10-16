@@ -34,7 +34,7 @@
 	
 	function updateGauges(value)
 	{
-		console.log(">> VALUE "+value);	
+		console.log(">>VALUE "+value);
 		for (var key in gauges)
 		{
 			//var value = getRandomValue(gauges[key]);
@@ -49,10 +49,10 @@
 	}
 	
 	createGauges();
-	<% if(typeof val !== "undefined") { %>
+	<% if(typeof val !== "undefined" && val != null && val != 'null' && val != '') { %>
 		updateGauges(<%= val %>);
 	<% } %>
-	<% if(typeof val === "undefined") { %>
+	<% if(typeof val === "undefined" || val == null || val == 'null' || val != '') { %>
 		updateGaugePercent();	
 	<% } %>
 	

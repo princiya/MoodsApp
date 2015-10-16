@@ -25,7 +25,12 @@
     
     <div class="indicator" id="indicator">
     	<script>
-    		ajaxCall('/showGauge', 'indicator');
+    		$.ajax({ 
+			   url: '/showGauge',
+			   success: function(data1){
+			   		$('#indicator').html(data1);
+			   }
+			});
     	</script>
     </div>
     
@@ -51,11 +56,15 @@
 	  var htracker = new headtrackr.Tracker();
 	  
 	  function registerListeners() {
+	  		console.log('in registerlisteners');
 	  		clearTimeout(timer2);
+	  		clearTimeout(timer1);
 	  		htracker.init(videoInput, canvasInput);
 	  		htracker.start();
+	  		console.log('before calling facetrackingevent in registerlisteners');
 	  		document.addEventListener("facetrackingEvent", faceTrackingEventFunction);
 	  		timer3 = setTimeout(function() {
+		   		console.log('setting timeout for headtrackingevent in registerlisteners after 6000 seconds');
 		   		document.addEventListener("headtrackingEvent", headTrackingEventFunction);	
 		   	}, 6000);
 	  }
@@ -63,6 +72,7 @@
 	  registerListeners();
 	  
 	  function faceTrackingEventFunction(event) {
+	  	console.log('inside facetrackingeventfunction');
 	  	// clear canvas
 		overlayContext.clearRect(0,0,320,240);
 		// once we have stable tracking, draw rectangle
@@ -78,8 +88,12 @@
 	   
 	   function headTrackingEventFunction( event ) {
 			/*if(!flag) setTimeout(headTrackingEventFunctionRemainder, 5000);*/
+			console.log('in headtrackingeventfunction');
 			eventX = event.x;
-			headTrackingEventFunctionRemainder();
+			if(!flag) {
+				headTrackingEventFunctionRemainder(event);
+				flag = 1;
+			}
 	   }
 	   
 	   function headTrackingEventFunctionRemainder(event) {
@@ -106,14 +120,20 @@
 			   type: 'POST',
 			   data: data,
 			   success: function(data){
+				   console.log('clearing timer3');
 				   clearTimeout(timer3);
+				   console.log('removing facetrackingEvent');
 				   document.removeEventListener("facetrackingEvent", faceTrackingEventFunction);
+				   console.log('removing headtrackingEvent');
 				   document.removeEventListener("headtrackingEvent", headTrackingEventFunction);
+				   flag = 0;
+				   console.log("stopping htracker");
 				   htracker.stop();
 					$.ajax({ 
 					   url: '/getMoodPercent',
 					   success: function(dataPercent){
 						   timer1 = setTimeout(function() {
+						   		console.log('setting timeout for timer1');
 						   		$.ajax({ 
 								   url: '/showGauge/'+parseInt(dataPercent),
 								   success: function(data){
@@ -123,7 +143,9 @@
 				   						   $('.recommendation').css('left', '0px');
 				   						   $('.recommendation').css('display', 'block');
 				   					   }
-									   ttimer2 = setTimeout(function() {
+									   timer2 = setTimeout(function() {
+								   			console.log('setting timeout for timer2');
+								   			console.log('clearing timeout for timer1');
 								   			clearTimeout(timer1);
 								   			$('.recommendation').css('animation-name', 'animateDivLeft');
 			   						   		$('.recommendation').css('left', '-350px');	
@@ -131,6 +153,7 @@
 								   			$('.mood .overlay').css('display','none');
 								   			$('.animationDiv').css('animation-name', 'animateDivDown');
 			   								$('.animationDiv').css('top', '50px');
+									   		console.log('calling register listeners');
 									   		registerListeners();
 									   	}, 6500);
 									}

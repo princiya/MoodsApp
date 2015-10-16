@@ -42,7 +42,8 @@ module.exports = {
 	},
 	
 	showGauge: function(req, res) {
-		res.render('showGauge', {val: req.param('val')});
+		console.log("#### VAL "+req.params('val'));
+		res.render('showGauge', {val: req.params('val')});
 	},
 	
 	getMoodPercent: function(req, res) {

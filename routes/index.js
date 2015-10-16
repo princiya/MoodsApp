@@ -39,6 +39,10 @@ module.exports = {
 				res.send(err);
 			});
 		});
+	},
+	
+	showGauge: function(req, res) {
+		res.render('showGauge');
 	}
 };
   

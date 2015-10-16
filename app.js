@@ -26,11 +26,6 @@ var db = require('./models');
 app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
-//app.use(express.favicon());
-//app.use(express.logger('dev'));
-//app.use(express.bodyParser());
-//app.use(express.methodOverride());
-//app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
 process.on('uncaughtException', function (err) {
@@ -45,6 +40,7 @@ if ('development' == app.get('env')) {
 app.get('/setup', index.setup);
 app.get('/', index.capture);
 app.post('/logMood', index.logMood);
+app.get('/showGauge', index.showGauge);
 
 app.use(function(req, res, next) {
     var err = new Error('URL Not Found');

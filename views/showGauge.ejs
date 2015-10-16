@@ -1,0 +1,55 @@
+<script type="text/javascript" src="/scripts/d3.v3.min.js"></script>
+<script type="text/javascript" src="/scripts/gauge.js"></script>
+
+<span id="gauge"></span>
+
+<script>
+	
+	var gauges = [];
+			
+	function createGauge(name, label, min, max)
+	{
+		var config = 
+		{
+			size: 120,
+			label: label,
+			min: undefined != min ? min : 0,
+			max: undefined != max ? max : 100,
+			minorTicks: 5
+		}
+		
+		var range = config.max - config.min;
+		config.yellowZones = [{ from: config.min + range*0.75, to: config.min + range*0.9 }];
+		config.redZones = [{ from: config.min + range*0.9, to: config.max }];
+		
+		gauges[name] = new Gauge(name, config);
+		gauges[name].render();
+	}
+	
+	function createGauges()
+	{
+		createGauge("gauge", "Blues");
+	}
+	
+	function updateGauges()
+	{
+		console.log("Updating");
+		for (var key in gauges)
+		{
+			console.log("Key "+key+" Value "+gauges[key]);
+			var value = getRandomValue(gauges[key])
+			gauges[key].redraw(value);
+		}
+	}
+	
+	function getRandomValue(gauge)
+	{
+		var overflow = 0; //10;
+		return gauge.config.min - overflow + (gauge.config.max - gauge.config.min + overflow*2) *  Math.random();
+	}
+	
+	createGauges();
+	updateGauges();
+	//setInterval(updateGauges, 5000);
+
+</script>

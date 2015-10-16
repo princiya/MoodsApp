@@ -44,3 +44,26 @@ a {
 .mood.happy .overlay {
 	background: green;
 }
+
+@keyframes animateDivDown {
+    from {top: -350px;}
+    to {top: 50px;}
+}
+
+@keyframes animateDivUp {
+    from {top: 50px;}
+    to {top: -350px;}
+}
+
+.animationDiv {
+	position: relative;
+	animation-name: animateDivDown;
+    animation-duration: 1s;
+    top: 50px;
+}
+
+.indicator {
+	position: absolute;
+	bottom: 0px;
+	right: 0px;
+}

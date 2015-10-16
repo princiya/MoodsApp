@@ -1,0 +1,16 @@
+{
+  "development": {
+    "username": "root",
+    "password": "",
+    "database": "moodsapp",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "root",
+    "password": "7ayicnirP7$",
+    "database": "moodsapp",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}

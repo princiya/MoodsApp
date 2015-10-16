@@ -1,0 +1,46 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+.mood {
+	position: absolute;
+	top: 100px;
+	width: 200px;
+	height: 200px;
+}
+
+.mood img {
+	width: 200px;
+	height: 200px;
+}
+
+.mood.sad {
+	left: 20px;
+}
+
+.mood.happy {
+	right: 20px;
+}
+
+.mood .overlay {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	height: 100%;
+	width: 100%;
+	opacity: 0.5;
+	display: none;
+}
+
+.mood.sad .overlay {
+	background: red;
+}
+
+.mood.happy .overlay {
+	background: green;
+}

@@ -1,0 +1,14 @@
+{
+  "name": "MoodsApp",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "ejs": "*",
+    "express": "^4.13.3",
+    "mysql": "^2.9.0",
+    "sequelize": "^3.12.1"
+  }
+}

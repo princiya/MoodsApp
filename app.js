@@ -8,7 +8,8 @@ var express = require('express')
   , index = require('./routes/index')
   , user = require('./routes/user')
   , http = require('http')
-  , path = require('path');
+  , path = require('path')
+  ;
 
 var app = express();
 
@@ -36,6 +37,15 @@ process.on('uncaughtException', function (err) {
 	 console.log(">> Uncaught exception: "+err);
 });
 
+// development only
+if ('development' == app.get('env')) {
+  //app.use(express.errorHandler());
+}
+
+app.get('/setup', index.setup);
+app.get('/', index.capture);
+app.post('/logMood', index.logMood);
+
 app.use(function(req, res, next) {
     var err = new Error('URL Not Found');
     err.status = 404;
@@ -45,15 +55,6 @@ app.use(function(req, res, next) {
 app.use(function(err, req, res, next) {
     res.send(err);
 });
-
-// development only
-if ('development' == app.get('env')) {
-  //app.use(express.errorHandler());
-}
-
-app.get('/', index.capture);
-app.get('/logMood/:val', index.logMood);
-app.get('/users', user.list);
 
 try {
 	db.sequelize.sync(/*{force:true}*/).then(function() {

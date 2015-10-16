@@ -54,17 +54,23 @@
 		}
 	   });
 	   
-	   document.addEventListener("headtrackingEvent", function( event ) {
+	   document.addEventListener("headtrackingEvent", headTrackingEventFunction);
+	   
+	   function headTrackingEventFunction( event ) {
 			//console.log('x '+event.x+' y '+event.y+' z '+event.z);
 			if(event.x <= 0) {
 				$('.mood.sad .overlay').css('display','block');
 				$('.mood.happy .overlay').css('display','none');
-				
+				logMood('indicator', 'sad');
+				document.removeEventListener("headtrackingEvent", headTrackingEventFunction);
 			} else {
 				$('.mood.happy .overlay').css('display','block');
 				$('.mood.sad .overlay').css('display','none');
+				logMood('indicator', 'happy');
+				document.removeEventListener("headtrackingEvent", headTrackingEventFunction);
 			}
-	   });
+	   }
+	
 	</script>
     
   </body>

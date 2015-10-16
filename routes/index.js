@@ -42,7 +42,19 @@ module.exports = {
 	},
 	
 	showGauge: function(req, res) {
-		res.render('showGauge');
+		res.render('showGauge', {val: req.param('val')});
+	},
+	
+	getMoodPercent: function(req, res) {
+		db.Mood.count().then(function(moods) {
+			db.Mood.count({where: {name: 'happy'}}).then(function(happiness) {
+				res.json(happiness/moods * 100);
+			}).catch(function(err) {
+				res.send(err);
+			});
+		}).catch(function(err) {
+			res.send(err);
+		});
 	}
 };
   

@@ -5,7 +5,7 @@ function ajaxCall(url, divId, type, data) {
 		   type: 'POST',
 		   data: data,
 		   success: function(data){
-			   if(divId != null && divId != '' && divId != 'null') {
+			   if(typeof divId !== "undefined" && divId != null && divId != '' && divId != 'null') {
 				   	$('#'+divId).html("Thanks for submitting "+data.name);
 			   }
 		   }
@@ -14,8 +14,11 @@ function ajaxCall(url, divId, type, data) {
 		$.ajax({ 
 		   url: url,
 		   success: function(data){
-			   if(divId != null && divId != '' && divId != 'null') {
+			   if(typeof divId !== "undefined" && divId != null && divId != '' && divId != 'null') {
 				   	$('#'+divId).html(data);
+			   } else {
+				   console.log("else from ajax call "+data);
+				   return data;
 			   }
 		   }
 		});

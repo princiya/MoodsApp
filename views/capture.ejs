@@ -46,11 +46,20 @@
 	  canvasOverlay.style.display = 'none';
 	
 	  var htracker = new headtrackr.Tracker();
-	  //htracker.init(videoInput, canvasInput);
-	  //htracker.start();
 	  
-	  /*document.addEventListener("facetrackingEvent", function( event ) {
-		// clear canvas
+	  function registerListeners() {
+	  		htracker.init(videoInput, canvasInput);
+	  		htracker.start();
+	  		document.addEventListener("facetrackingEvent", faceTrackingEventFunction);
+	  		setTimeout(function() {
+		   		document.addEventListener("headtrackingEvent", headTrackingEventFunction);	
+		   	}, 8000);
+	  }
+	  
+	  registerListeners();
+	  
+	  function faceTrackingEventFunction(event) {
+	  	// clear canvas
 		overlayContext.clearRect(0,0,320,240);
 		// once we have stable tracking, draw rectangle
 		if (event.detection == "CS") {
@@ -61,11 +70,7 @@
 			overlayContext.rotate((Math.PI/2)-event.angle);
 			overlayContext.translate(-event.x, -event.y);
 		}
-	   });
-	   
-	   setTimeout(function() {
-	   	document.addEventListener("headtrackingEvent", headTrackingEventFunction);	
-	   }, 8000);*/
+	  }
 	   
 	   function headTrackingEventFunction( event ) {
 			/*if(!flag) setTimeout(headTrackingEventFunctionRemainder, 5000);*/
@@ -77,16 +82,47 @@
 	   	if(eventX <= 0) {
 			$('.mood.sad .overlay').css('display','block');
 			$('.mood.happy .overlay').css('display','none');
-			logMood('indicator', 'sad');
-			document.removeEventListener("headtrackingEvent", headTrackingEventFunction);
+			logMood('sad');
 		} else {
 			$('.mood.happy .overlay').css('display','block');
 			$('.mood.sad .overlay').css('display','none');
-			logMood('indicator', 'happy');
-			document.removeEventListener("headtrackingEvent", headTrackingEventFunction);
+			logMood('happy');
 		}
 	   }
-	
+	   
+	   function logMood(mood) {
+	   		$('.animationDiv').css('animation-name', 'animateDivUp');
+	   		$('.animationDiv').css('top', '-350px');
+	   		var data = {
+				mood: mood
+			};
+			
+			$.ajax({ 
+			   url: '/logMood',
+			   type: 'POST',
+			   data: data,
+			   success: function(data){
+				   document.removeEventListener("facetrackingEvent", faceTrackingEventFunction);
+				   document.removeEventListener("headtrackingEvent", headTrackingEventFunction);
+				   htracker.stop();
+					$.ajax({ 
+					   url: '/getMoodPercent',
+					   success: function(data){
+						   setTimeout(function() {
+						   		ajaxCall('/showGauge/'+parseInt(data), 'indicator');
+						   		setTimeout(function() {
+						   			$('.mood .overlay').css('display','none');
+						   			$('.animationDiv').css('animation-name', 'animateDivDown');
+	   								$('.animationDiv').css('top', '50px');
+							   		registerListeners();
+							   	}, 3000);
+						   }, 2000);
+					   	}
+					});
+			   }
+			});
+	   }
+	   
 	</script>
     
   </body>

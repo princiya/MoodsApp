@@ -11,7 +11,7 @@
 	{
 		var config = 
 		{
-			size: 120,
+			size: 220,
 			label: label,
 			min: undefined != min ? min : 0,
 			max: undefined != max ? max : 100,
@@ -19,8 +19,9 @@
 		}
 		
 		var range = config.max - config.min;
-		config.yellowZones = [{ from: config.min + range*0.75, to: config.min + range*0.9 }];
-		config.redZones = [{ from: config.min + range*0.9, to: config.max }];
+		config.redZones = [{ from: 0, to: 40 }];
+		config.yellowZones = [{ from: 40, to: 60 }];
+		config.greenZones = [{ from: 60, to: 100 }];
 		
 		gauges[name] = new Gauge(name, config);
 		gauges[name].render();
@@ -31,14 +32,13 @@
 		createGauge("gauge", "Blues");
 	}
 	
-	function updateGauges()
+	function updateGauges(value)
 	{
-		console.log("Updating");
+		console.log(">> VALUE "+value);	
 		for (var key in gauges)
 		{
-			console.log("Key "+key+" Value "+gauges[key]);
-			var value = getRandomValue(gauges[key])
-			gauges[key].redraw(value);
+			//var value = getRandomValue(gauges[key]);
+			gauges[key].redraw(value || 50);
 		}
 	}
 	
@@ -49,7 +49,20 @@
 	}
 	
 	createGauges();
-	updateGauges();
-	//setInterval(updateGauges, 5000);
+	<% if(typeof val !== "undefined") { %>
+		updateGauges(<%= val %>);
+	<% } %>
+	<% if(typeof val === "undefined") { %>
+		updateGaugePercent();	
+	<% } %>
+	
+	function updateGaugePercent() {
+		$.ajax({ 
+		   url: '/getMoodPercent',
+		   success: function(data){
+			   ajaxCall('/showGauge/'+parseInt(data), 'indicator');
+		   }
+		});
+	}
 
 </script>

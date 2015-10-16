@@ -41,6 +41,8 @@ app.get('/setup', index.setup);
 app.get('/', index.capture);
 app.post('/logMood', index.logMood);
 app.get('/showGauge', index.showGauge);
+app.get('/showGauge/:val', index.showGauge);
+app.get('/getMoodPercent', index.getMoodPercent);
 
 app.use(function(req, res, next) {
     var err = new Error('URL Not Found');

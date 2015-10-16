@@ -1,7 +1,6 @@
 /* start */
 function Gauge(placeholderName, configuration)
 {
-	console.log(">> From Gauge: "+placeholderName);
 	this.placeholderName = placeholderName;
 	
 	var self = this; // for internal d3 functions
@@ -23,9 +22,9 @@ function Gauge(placeholderName, configuration)
 		this.config.majorTicks = configuration.majorTicks || 5;
 		this.config.minorTicks = configuration.minorTicks || 2;
 		
-		this.config.greenColor 	= configuration.greenColor || "#109618";
-		this.config.yellowColor = configuration.yellowColor || "#FF9900";
-		this.config.redColor 	= configuration.redColor || "#DC3912";
+		this.config.greenColor 	= configuration.greenColor || "#5cb85c";
+		this.config.yellowColor = configuration.yellowColor || "#f0ad4e";
+		this.config.redColor 	= configuration.redColor || "#d9534f";
 		
 		this.config.transitionDuration = configuration.transitionDuration || 500;
 	}

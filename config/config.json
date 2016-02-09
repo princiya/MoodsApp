@@ -8,7 +8,7 @@
   },
   "production": {
     "username": "root",
-    "password": "7ayicnirP7$",
+    "password": "",
     "database": "moodsapp",
     "host": "127.0.0.1",
     "dialect": "mysql"
